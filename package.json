@@ -1,0 +1,41 @@
+{
+  "name": "piyush-gupta-portfolio",
+  "version": "1.0.0",
+  "description": "Personal portfolio website for Piyush Gupta - Machine Learning Engineer",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx live-server --port=3000",
+    "build": "echo 'No build process needed for static site'",
+    "deploy": "echo 'Deploy to GitHub Pages or other hosting service'",
+    "lint": "echo 'No linting configured for static site'",
+    "test": "echo 'No tests configured'"
+  },
+  "keywords": [
+    "portfolio",
+    "machine-learning",
+    "ai",
+    "web-development",
+    "responsive",
+    "dark-mode"
+  ],
+  "author": "Piyush Gupta",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Pg1910/piyush-portfolio.git"
+  },
+  "homepage": "https://pg1910.github.io/piyush-portfolio",
+  "devDependencies": {
+    "serve": "^14.2.0",
+    "live-server": "^1.2.2"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
