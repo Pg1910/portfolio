@@ -788,7 +788,7 @@ section {
     border-radius: 0.5rem;
     overflow: hidden;
     box-shadow: var(--shadow-medium);
-    width: 110px;
+    width: clamp(90px, 18vw, 120px);
     justify-self: end;
 }
 
@@ -801,6 +801,17 @@ section {
     transform: translateZ(0);
     transition: transform 0.3s ease, filter 0.3s ease;
     filter: contrast(1.05) saturate(0.9) sepia(0.08);
+}
+
+/* Fallback: if grid fails, ensure images never overflow the card */
+.timeline-content img.experience-img {
+    max-width: clamp(90px, 18vw, 120px);
+    width: clamp(90px, 18vw, 120px);
+    height: auto;
+    aspect-ratio: 4 / 3;
+    float: right;
+    margin-left: 12px;
+    border-radius: 8px;
 }
 
 .timeline-item:hover .experience-img {
