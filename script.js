@@ -559,6 +559,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initTypingAnimation();
     initVhsTimestamp();
     initVhsJitter();
+    initResearchSection();
     
     // Observe sections for entrance animations
     const sections = document.querySelectorAll('section[id]');
@@ -652,6 +653,48 @@ function animateSectionEntrance(section) {
             element.classList.add('animate-in');
         }, index * 50);
     });
+}
+
+// Research section data and rendering
+function initResearchSection() {
+    const papers = [
+        { title: 'Attention Is All You Need', link: 'https://arxiv.org/abs/1706.03762' },
+        { title: 'VGGT: Visual Geometry Grounded Transformer', link: 'https://arxiv.org/abs/2503.11651' },
+        { title: 'GONet: A Generalizable Deep Learning Model for Glaucoma Detection', link: 'https://arxiv.org/abs/2502.19514' },
+        { title: 'U-Net: Convolutional Networks for Biomedical Image Segmentation', link: 'https://arxiv.org/abs/1505.04597' },
+        { title: 'Very Deep Convolutional Networks for Large-Scale Image Recognition (VGGNet)', link: 'https://arxiv.org/abs/1409.1556' },
+        { title: 'Going Deeper with Convolutions (Inception/GoogLeNet)', link: 'https://arxiv.org/abs/1409.4842' },
+        { title: 'Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks', link: 'https://arxiv.org/abs/1506.01497' },
+        { title: 'Fully Convolutional Networks for Semantic Segmentation (FCN)', link: 'https://arxiv.org/abs/1411.4038' },
+        { title: 'You Only Look Once: Unified, Real-Time Object Detection (YOLO)', link: 'https://arxiv.org/abs/1506.02640' }
+    ];
+    const datasets = [
+        { name: 'xView', link: 'https://xviewdataset.org' },
+        { name: 'RarePlanes', link: 'https://rareplanes.org' },
+        { name: 'LEVIR-CD', link: 'https://justchenhao.github.io/LEVIR/' },
+        { name: 'WHU-CD', link: 'https://study.rsgis.whu.edu.cn/pages/download/building_dataset.html' },
+        { name: 'DOTA', link: 'https://captain-whu.github.io/DOTA/' },
+        { name: 'HYGD', link: '#' },
+        { name: 'ORIGA', link: 'https://refuge.grand-challenge.org/datasets/ (ORIGA info references)' },
+        { name: 'REFUGE', link: 'https://refuge.grand-challenge.org/' },
+        { name: 'DRISHTI-GS', link: 'https://cvit.iiit.ac.in/projects/mip/drishti-gs/' },
+        { name: 'EyePACS (AIROGS-Light v2)', link: 'https://airogs.grand-challenge.org/' }
+    ];
+
+    const paperList = document.getElementById('paperList');
+    const datasetList = document.getElementById('datasetList');
+    const paperCountEl = document.getElementById('paperCount');
+    const datasetCountEl = document.getElementById('datasetCount');
+    if (!paperList || !datasetList) return;
+
+    paperList.innerHTML = papers
+        .map(p => `<li class="fade-in-up"><a href="${p.link}" target="_blank" rel="noopener">${p.title}</a></li>`)
+        .join('');
+    datasetList.innerHTML = datasets
+        .map(d => `<li class="fade-in-up"><a href="${d.link}" target="_blank" rel="noopener">${d.name}</a></li>`)
+        .join('');
+    if (paperCountEl) paperCountEl.textContent = String(papers.length);
+    if (datasetCountEl) datasetCountEl.textContent = String(datasets.length);
 }
 
 // Intersection Observer for section animations

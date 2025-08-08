@@ -543,6 +543,58 @@ p {
 section {
     padding: 5rem 0;
 }
+.research .research-meta {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.count-badge {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.research-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.paper-list, .dataset-list {
+    list-style: none;
+    display: grid;
+    gap: 0.75rem;
+    padding-left: 0;
+}
+
+.paper-list li, .dataset-list li {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+    box-shadow: var(--shadow-light);
+}
+
+.paper-list a, .dataset-list a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.paper-list a:hover, .dataset-list a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .research-grid {
+        grid-template-columns: 1fr;
+    }
+}
 
 .section-title {
     text-align: center;
