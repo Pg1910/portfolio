@@ -395,7 +395,7 @@ p {
 }
 
 .btn-primary {
-    background: var(--gradient-primary);
+    background: var(--secondary-color);
     color: white;
 }
 
@@ -404,7 +404,7 @@ p {
 }
 
 .btn-secondary {
-    background: var(--gradient-secondary);
+    background: var(--primary-color);
     color: white;
 }
 
@@ -414,12 +414,12 @@ p {
 
 .btn-outline {
     background: transparent;
-    color: var(--primary-color);
-    border: 2px solid var(--primary-color);
+    color: var(--secondary-color);
+    border: 2px solid var(--secondary-color);
 }
 
 .btn-outline:hover {
-    background: var(--primary-color);
+    background: var(--secondary-color);
     color: white;
 }
 
@@ -438,6 +438,33 @@ p {
 .profile-card:hover {
     transform: none;
     box-shadow: var(--shadow-medium);
+}
+
+/* Profile gallery layout */
+.profile-gallery {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    align-items: end;
+}
+
+.profile-card--alt {
+    width: 220px;
+    height: 220px;
+    align-self: start;
+    justify-self: center;
+    transform: rotate(-1.5deg);
+    animation: gentle-bob 6s ease-in-out infinite;
+}
+
+.profile-img--alt {
+    filter: contrast(1.05) saturate(0.9) sepia(0.1);
+}
+
+@keyframes gentle-bob {
+    0%, 100% { transform: rotate(-1.5deg) translateY(0); }
+    50% { transform: rotate(-1.5deg) translateY(-4px); }
 }
 
 .profile-img {
@@ -645,6 +672,7 @@ section {
     position: relative;
     max-width: 800px;
     margin: 0 auto;
+    perspective: 800px;
 }
 
 .timeline::before {
@@ -661,6 +689,28 @@ section {
 .timeline-item {
     position: relative;
     margin-bottom: 3rem;
+}
+
+/* Timeline central dot + hover pulse */
+.timeline-item::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 1.5rem;
+    width: 10px;
+    height: 10px;
+    transform: translate(-50%, 0);
+    border-radius: 50%;
+    background: var(--bg-primary);
+    border: 2px solid var(--primary-color);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    z-index: 1;
+}
+
+.timeline-item:hover::after {
+    transform: translate(-50%, 0) scale(1.15);
+    background: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.04), 0 0 0 8px rgba(0, 0, 0, 0.02);
 }
 
 .timeline-item:nth-child(odd) .timeline-content {
@@ -683,6 +733,8 @@ section {
     border-radius: 1rem;
     box-shadow: var(--shadow-medium);
     position: relative;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
 }
 
 .timeline-content::before {
@@ -722,6 +774,96 @@ section {
 .duration {
     color: var(--text-secondary);
     font-size: 0.9rem;
+}
+
+/* Experience card media layout */
+.experience-with-media {
+    display: grid;
+    grid-template-columns: 1fr 160px;
+    gap: 1rem;
+    align-items: center;
+}
+
+.experience-media {
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: var(--shadow-medium);
+}
+
+.experience-img {
+    display: block;
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    transform: translateZ(0);
+    transition: transform 0.3s ease, filter 0.3s ease;
+    filter: contrast(1.05) saturate(0.9) sepia(0.08);
+}
+
+.timeline-item:hover .experience-img {
+    transform: scale(1.03);
+    filter: contrast(1.08) saturate(0.95);
+}
+
+@media (max-width: 768px) {
+    .profile-gallery {
+        grid-template-columns: 1fr;
+        justify-items: center;
+    }
+    .profile-card--alt {
+        width: 200px;
+        height: 200px;
+        transform: rotate(0deg);
+        animation: none;
+    }
+    .experience-with-media {
+        grid-template-columns: 1fr;
+    }
+    .experience-img {
+        height: 140px;
+    }
+}
+
+/* Hover motion for experience cards */
+.timeline-item:hover .timeline-content {
+    transform: translateY(-4px) scale(1.01) skewX(-0.3deg) rotateX(0.4deg);
+    box-shadow: var(--shadow-heavy);
+    filter: contrast(1.03) saturate(0.95);
+}
+
+/* Entry wipe and pop for timeline cards */
+.timeline-item.stagger-item .timeline-content {
+    transform: translateY(10px) skewX(0.2deg);
+    opacity: 0.98;
+}
+
+.timeline-item.stagger-item.animate-in .timeline-content {
+    animation: timeline-card-reveal 500ms ease-out both;
+}
+
+.timeline-content::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -30%;
+    width: 30%;
+    background: linear-gradient(90deg, rgba(255,255,255,0.0) 0%, rgba(0,0,0,0.08) 60%, rgba(255,255,255,0.0) 100%);
+    transform: translateX(-110%);
+    pointer-events: none;
+}
+
+.timeline-item.stagger-item.animate-in .timeline-content::after {
+    animation: wipe-across 900ms ease-out forwards;
+}
+
+@keyframes timeline-card-reveal {
+    from { transform: translateY(12px) skewX(0.2deg); filter: blur(1px); opacity: 0.85; }
+    to { transform: translateY(0) skewX(0); filter: none; opacity: 1; }
+}
+
+@keyframes wipe-across {
+    to { transform: translateX(210%); }
 }
 
 /* Projects Section */
@@ -1021,7 +1163,7 @@ section {
 .bot-toggle {
     width: 60px;
     height: 60px;
-    background: #25d366;
+    background: var(--secondary-color);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -1100,6 +1242,30 @@ section {
     gap: 0.5rem;
 }
 
+/* Bot suggestions (quick replies) */
+.bot-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem 0.25rem 1rem;
+    border-top: 1px dashed var(--border-color);
+}
+
+.bot-suggestions button {
+    appearance: none;
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border-radius: 999px;
+    padding: 0.25rem 0.6rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.bot-suggestions button:hover {
+    background: var(--bg-tertiary);
+}
+
 .bot-input input {
     flex: 1;
     padding: 0.5rem;
@@ -1110,7 +1276,7 @@ section {
 }
 
 .bot-input button {
-    background: var(--primary-color);
+    background: var(--secondary-color);
     color: white;
     border: none;
     padding: 0.5rem 1rem;
@@ -1120,7 +1286,7 @@ section {
 }
 
 .bot-input button:hover {
-    background: var(--secondary-color);
+    background: var(--primary-color);
 }
 
 /* Footer */
@@ -1369,7 +1535,7 @@ html {
     margin-top: 2rem;
     padding: 0.75rem 1.5rem;
     border-radius: 0.5rem;
-    background: var(--primary-color);
+    background: var(--secondary-color);
     color: white;
     text-decoration: none;
     font-weight: 500;

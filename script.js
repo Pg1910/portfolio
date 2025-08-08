@@ -96,8 +96,35 @@ function handleContactForm(e) {
         message: formData.get('message')
     };
 
-    // Show success message (in a real app, you'd send this to a server)
-    showNotification('Message sent successfully! I\'ll get back to you soon.', 'success');
+    // Send via mailto (opens default email client)
+    const to = 'gguptapiyush45@gmail.com';
+    const subject = encodeURIComponent(`[Portfolio] ${data.subject || 'New message'}`);
+    const bodyLines = [
+        `Name: ${data.name || '-'} `,
+        `Email: ${data.email || '-'} `,
+        '',
+        (data.message || '').trim()
+    ];
+    const body = encodeURIComponent(bodyLines.join('\n'));
+    const cc = data.email ? `&cc=${encodeURIComponent(data.email)}` : '';
+    const mailtoUrl = `mailto:${to}?subject=${subject}&body=${body}${cc}`;
+
+    // Try opening the mail client
+    const link = document.createElement('a');
+    link.href = mailtoUrl;
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // Best-effort: copy composed email content to clipboard for fallback
+    const clipboardText = `To: ${to}\n${data.email ? `CC: ${data.email}\n` : ''}Subject: [Portfolio] ${data.subject || 'New message'}\n\n${bodyLines.join('\n')}`;
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(clipboardText).catch(() => {});
+    }
+
+    // Inform the user
+    showNotification('Opening your email app... If it does not open, the message content has been copied to your clipboard.', 'success');
     contactForm.reset();
 }
 
@@ -146,6 +173,42 @@ function showNotification(message, type = 'info') {
 }
 
 // WhatsApp Chat Bot
+const profileData = {
+    name: 'Piyush Gupta',
+    title: 'Machine Learning Engineer',
+    location: 'Bengaluru, India / Kurnool, Andhra Pradesh',
+    education: {
+        degree: 'B.Tech Mechanical Engineering',
+        institute: 'IIITDM Kurnool, Andhra Pradesh'
+    },
+    contact: {
+        email: 'gguptapiyush45@gmail.com',
+        linkedin: 'https://linkedin.com/in/piyush-gupta-200416309',
+        github: 'https://github.com/Pg1910',
+        twitter: 'https://x.com/Gupta_piyush03',
+        blog: 'https://substack.com/@piyushgupta114232',
+        resume: 'Piyush_resume.pdf'
+    },
+    skills: {
+        languages: ['Python', 'C++', 'Java', 'R'],
+        frameworks: ['PyTorch', 'TensorFlow', 'Hugging Face', 'OpenCV', 'scikit-learn'],
+        tools: ['Git', 'Docker', 'AWS', 'Google Cloud', 'React', 'Django']
+    },
+    projects: [
+        { name: 'GlaucFusion', url: 'https://github.com/Pg1910/glaucoma-detection-ai', desc: 'Segmentation-aware glaucoma diagnosis with ViT' },
+        { name: 'SCRIBE', url: 'https://github.com/Pg1910/SCRIBE-Smart-Content-Reporting-Intelligence-for-Blogging-Engagement', desc: 'Content analysis for blogging engagement' },
+        { name: 'Breast Cancer Segmentation', url: 'https://github.com/Pg1910/breast_cancer_image_segmentation_of_terahertz_images_using_customUNET', desc: 'Custom UNET for terahertz images' }
+    ],
+    experience: [
+        { role: 'Image Processing Research Intern', company: 'AnyTechPros', duration: 'July 2024 - Present' },
+        { role: 'ML Research Intern', company: 'MANIT Bhopal', duration: 'June 2024' },
+        { role: 'SDE Intern', company: 'Bluestock Fintech Pvt Ltd', duration: 'May 2024 - June 2024' },
+        { role: 'Samsung PRISM Intern', company: 'IIITDM Kurnool', duration: 'Dec 2024 - Mar 2025' }
+    ],
+    availability: {
+        summary: 'Open to ML/AI Engineer, Computer Vision, and Research roles (internships and full-time). Remote/hybrid welcome. Timeline flexible—please email to coordinate.'
+    }
+};
 let botOpen = false;
 
 function toggleBot() {
@@ -153,6 +216,8 @@ function toggleBot() {
     if (botOpen) {
         botChat.classList.add('active');
         botInput.focus();
+        // Show quick suggestions on open
+        renderBotSuggestions(['resume', 'projects', 'skills', 'experience', 'contact', 'availability']);
     } else {
         botChat.classList.remove('active');
     }
@@ -173,8 +238,14 @@ function sendBotMessage() {
     
     // Simulate bot response
     setTimeout(() => {
-        const response = generateBotResponse(message);
-        addBotMessage(response, 'bot');
+        const result = generateBotResponse(message);
+        const text = typeof result === 'string' ? result : result.text;
+        addBotMessage(text, 'bot');
+        if (typeof result === 'object' && Array.isArray(result.suggestions)) {
+            renderBotSuggestions(result.suggestions);
+        } else {
+            renderBotSuggestions(['resume', 'projects', 'skills', 'experience', 'contact']);
+        }
     }, 1000);
 }
 
@@ -193,7 +264,11 @@ function addBotMessage(message, sender) {
     `;
     
     const messageP = document.createElement('p');
-    messageP.textContent = message;
+    if (sender === 'bot') {
+        messageP.innerHTML = message;
+    } else {
+        messageP.textContent = message;
+    }
     messageP.style.margin = '0';
     
     messageDiv.appendChild(messageP);
@@ -202,27 +277,142 @@ function addBotMessage(message, sender) {
 }
 
 function generateBotResponse(userMessage) {
-    const message = userMessage.toLowerCase();
-    
-    if (message.includes('hello') || message.includes('hi') || message.includes('hey')) {
-        return "Hello! I'm Piyush's assistant. How can I help you today?";
-    } else if (message.includes('project') || message.includes('work')) {
-        return "Piyush has worked on several interesting projects including GlaucFusion for glaucoma detection, SCRIBE for content analysis, and medical image segmentation. You can check them out on his GitHub!";
-    } else if (message.includes('contact') || message.includes('email')) {
-        return "You can reach Piyush at gguptapiyush45@gmail.com or connect with him on LinkedIn: https://linkedin.com/in/piyush-gupta-200416309";
-    } else if (message.includes('experience') || message.includes('intern')) {
-        return "Piyush has experience as an Image Processing Research Intern at AnyTechPros, ML Research Intern at MANIT Bhopal, SDE Intern at Bluestock Fintech, and Samsung PRISM Intern at IIITDM Kurnool.";
-    } else if (message.includes('skill') || message.includes('technology')) {
-        return "Piyush specializes in Python, PyTorch, TensorFlow, OpenCV, and various ML/AI frameworks. He's also experienced with cloud platforms like AWS and Google Cloud.";
-    } else if (message.includes('resume') || message.includes('cv')) {
-        return "You can download Piyush's resume from the main page. Look for the 'Download Resume' button in the hero section!";
-    } else if (message.includes('github')) {
-        return "Check out Piyush's projects on GitHub: https://github.com/Pg1910";
-    } else if (message.includes('thank')) {
-        return "You're welcome! Feel free to ask if you have any other questions.";
-    } else {
-        return "That's an interesting question! For specific inquiries, I'd recommend reaching out to Piyush directly via email or LinkedIn. I'm here to help with general information about his work and experience.";
+    const text = userMessage.toLowerCase();
+    const clean = text.replace(/[^a-z0-9\s]/g, ' ');
+    const includes = (arr) => arr.some(k => clean.includes(k));
+
+    // Greeting
+    if (includes(['hello', 'hi ', 'hey', 'greetings', 'namaste'])) {
+        return {
+            text: `Hello! I'm Piyush's assistant. How can I help you today? Try asking for <b>resume</b>, <b>projects</b>, <b>skills</b>, <b>experience</b>, <b>contact</b>, or <b>availability</b>.`,
+            suggestions: ['resume', 'projects', 'skills', 'experience', 'contact', 'availability']
+        };
     }
+
+    // Resume
+    if (includes(['resume', 'cv', 'curriculum'])) {
+        return {
+            text: `You can download the resume here: <a href="${profileData.contact.resume}" target="_blank">Download Resume (PDF)</a>.`,
+            suggestions: ['skills', 'experience', 'projects', 'contact']
+        };
+    }
+
+    // Contact
+    if (includes(['contact', 'email', 'reach', 'connect'])) {
+        return {
+            text: `Email: <a href="mailto:${profileData.contact.email}">${profileData.contact.email}</a><br>LinkedIn: <a href="${profileData.contact.linkedin}" target="_blank">LinkedIn Profile</a><br>GitHub: <a href="${profileData.contact.github}" target="_blank">@Pg1910</a>`,
+            suggestions: ['resume', 'projects', 'availability']
+        };
+    }
+
+    // Phone
+    if (includes(['phone', 'call', 'mobile', 'number'])) {
+        return {
+            text: `Phone details are shared on request. Please email at <a href="mailto:${profileData.contact.email}">${profileData.contact.email}</a>.`,
+            suggestions: ['email', 'linkedin']
+        };
+    }
+
+    // Skills / Tech Stack
+    if (includes(['skill', 'stack', 'technology', 'tech', 'tools', 'language', 'framework'])) {
+        const s = profileData.skills;
+        return {
+            text: `<b>Languages:</b> ${s.languages.join(', ')}<br><b>Frameworks:</b> ${s.frameworks.join(', ')}<br><b>Tools:</b> ${s.tools.join(', ')}`,
+            suggestions: ['projects', 'experience', 'resume']
+        };
+    }
+
+    // Experience
+    if (includes(['experience', 'intern', 'work history', 'roles', 'timeline'])) {
+        const lines = profileData.experience.map(e => `• ${e.role} — ${e.company} (${e.duration})`).join('<br>');
+        return {
+            text: `${lines}`,
+            suggestions: ['skills', 'projects', 'resume']
+        };
+    }
+
+    // Education
+    if (includes(['education', 'degree', 'college', 'university', 'btech'])) {
+        const ed = profileData.education;
+        return {
+            text: `${ed.degree}<br>${ed.institute}`,
+            suggestions: ['skills', 'projects', 'resume']
+        };
+    }
+
+    // Location / Work Mode
+    if (includes(['location', 'based', 'where', 'city', 'relocate', 'relocation', 'remote', 'hybrid', 'onsite'])) {
+        return {
+            text: `Based in ${profileData.location}. Open to remote and hybrid roles; relocation can be discussed.`,
+            suggestions: ['availability', 'contact']
+        };
+    }
+
+    // Availability
+    if (includes(['available', 'availability', 'joining', 'join', 'start', 'notice', 'hiring', 'open to work', 'opportunity', 'role', 'position'])) {
+        return {
+            text: `${profileData.availability.summary}`,
+            suggestions: ['contact', 'resume', 'skills']
+        };
+    }
+
+    // Projects / Portfolio
+    if (includes(['project', 'portfolio', 'work', 'code', 'repo', 'github'])) {
+        const p = profileData.projects
+            .map(pr => `• <b>${pr.name}</b> — ${pr.desc} (<a href="${pr.url}" target="_blank">code</a>)`)
+            .join('<br>');
+        return {
+            text: `${p}<br>GitHub: <a href="${profileData.contact.github}" target="_blank">${profileData.contact.github}</a>`,
+            suggestions: ['skills', 'experience', 'resume']
+        };
+    }
+
+    // LinkedIn
+    if (includes(['linkedin'])) {
+        return { text: `LinkedIn: <a href="${profileData.contact.linkedin}" target="_blank">Profile</a>`, suggestions: ['contact', 'resume'] };
+    }
+
+    // Blog / Writing
+    if (includes(['blog', 'substack', 'article', 'write', 'writing'])) {
+        return { text: `Blog: <a href="${profileData.contact.blog}" target="_blank">Substack</a>`, suggestions: ['projects', 'resume'] };
+    }
+
+    if (includes(['thank', 'thanks', 'thank you'])) {
+        return { text: `You're welcome!`, suggestions: ['resume', 'projects', 'contact'] };
+    }
+
+    return {
+        text: `I can help with <b>resume</b>, <b>projects</b>, <b>skills</b>, <b>experience</b>, <b>education</b>, <b>contact</b>, <b>availability</b>, and <b>location</b>. Try typing one of those keywords or tap a suggestion below.`,
+        suggestions: ['resume', 'projects', 'skills', 'experience', 'education', 'contact']
+    };
+}
+
+// Suggestions UI
+let suggestionsContainer = null;
+function ensureSuggestionsContainer() {
+    if (!suggestionsContainer) {
+        suggestionsContainer = document.createElement('div');
+        suggestionsContainer.id = 'botSuggestions';
+        suggestionsContainer.className = 'bot-suggestions';
+        // Insert below messages, above input
+        const parent = document.getElementById('botChat');
+        parent.insertBefore(suggestionsContainer, parent.querySelector('.bot-input'));
+    }
+}
+
+function renderBotSuggestions(suggestions) {
+    ensureSuggestionsContainer();
+    suggestionsContainer.innerHTML = '';
+    suggestions.slice(0, 6).forEach(s => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = s;
+        btn.addEventListener('click', () => {
+            botInput.value = s;
+            sendBotMessage();
+        });
+        suggestionsContainer.appendChild(btn);
+    });
 }
 
 // Scroll Animations
@@ -411,7 +601,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Preload critical images
 function preloadImages() {
     const imageUrls = [
-        'profile.jpg',
+        'latest-pic.jpg',
         'project1.png',
         'project2.png',
         'project3.png',
