@@ -107,68 +107,66 @@
 }
 
 :root {
-    /* Light Mode Colors - Professional Robotics Theme */
-    --primary-color: #2563eb;
-    --secondary-color: #1e40af;
-    --accent-color: #3b82f6;
-    --neon-blue: #0ea5e9;
-    --neon-purple: #8b5cf6;
-    --cyber-green: #059669;
-    --text-primary: #0f172a;
-    --text-secondary: #475569;
-    --bg-primary: #ffffff;
-    --bg-secondary: #f8fafc;
-    --bg-tertiary: #f1f5f9;
-    --border-color: #e2e8f0;
-    --shadow-light: 0 1px 3px rgba(0, 0, 0, 0.1);
-    --shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --shadow-heavy: 0 10px 25px rgba(0, 0, 0, 0.1);
-    --glow-blue: 0 0 20px rgba(37, 99, 235, 0.3);
-    --glow-purple: 0 0 20px rgba(139, 92, 246, 0.3);
-    --glow-green: 0 0 20px rgba(5, 150, 105, 0.3);
-    --gradient-primary: linear-gradient(135deg, #2563eb 0%, #1e40af 50%, #3b82f6 100%);
-    --gradient-secondary: linear-gradient(135deg, #0ea5e9 0%, #059669 100%);
-    --gradient-cyber: linear-gradient(45deg, #2563eb, #1e40af, #3b82f6, #0ea5e9);
+    /* Light Mode Colors - VHS/Office Stuffy Theme */
+    --primary-color: #5c584f; /* muted taupe */
+    --secondary-color: #3f3c35; /* dull charcoal */
+    --accent-color: #7a6b5b; /* brownish accent */
+    --neon-blue: #5c584f; /* disabled neon -> muted */
+    --neon-purple: #7a6b5b;
+    --cyber-green: #4b5a4b; /* desaturated green */
+    --text-primary: #1f1d1a; /* dark ink */
+    --text-secondary: #5a554c; /* faded ink */
+    --bg-primary: #f3efe7; /* paper beige */
+    --bg-secondary: #e9e5dd; /* file folder */
+    --bg-tertiary: #ded9cf; /* desk beige */
+    --border-color: #c9c3b9; /* manila folder */
+    --shadow-light: 0 1px 0 rgba(0, 0, 0, 0.06);
+    --shadow-medium: 0 2px 6px rgba(0, 0, 0, 0.08);
+    --shadow-heavy: 0 6px 18px rgba(0, 0, 0, 0.12);
+    --glow-blue: none;
+    --glow-purple: none;
+    --glow-green: none;
+    --gradient-primary: linear-gradient(180deg, #5c584f, #5c584f);
+    --gradient-secondary: linear-gradient(180deg, #7a6b5b, #7a6b5b);
+    --gradient-cyber: linear-gradient(180deg, #5c584f, #5c584f);
 }
 
-/* Dark Mode Colors - Professional Robotics Theme */
+/* Dark Mode Colors - VHS/Office Stuffy Theme */
 [data-theme="dark"] {
-    --primary-color: #3b82f6;
-    --secondary-color: #60a5fa;
-    --accent-color: #93c5fd;
-    --neon-blue: #0ea5e9;
-    --neon-purple: #a78bfa;
-    --cyber-green: #10b981;
-    --text-primary: #f8fafc;
-    --text-secondary: #cbd5e1;
-    --bg-primary: #0f172a;
-    --bg-secondary: #1e293b;
-    --bg-tertiary: #334155;
-    --border-color: #475569;
-    --shadow-light: 0 1px 3px rgba(0, 0, 0, 0.3);
-    --shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.3);
-    --shadow-heavy: 0 10px 25px rgba(0, 0, 0, 0.3);
-    --glow-blue: 0 0 30px rgba(59, 130, 246, 0.5);
-    --glow-purple: 0 0 30px rgba(139, 92, 246, 0.5);
-    --glow-green: 0 0 30px rgba(16, 185, 129, 0.5);
-    --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #60a5fa 50%, #93c5fd 100%);
-    --gradient-secondary: linear-gradient(135deg, #0ea5e9 0%, #10b981 100%);
-    --gradient-cyber: linear-gradient(45deg, #3b82f6, #60a5fa, #93c5fd, #0ea5e9);
+    --primary-color: #b9b39f; /* soft beige highlight */
+    --secondary-color: #9e9885;
+    --accent-color: #c3b8a6;
+    --neon-blue: #9e9885;
+    --neon-purple: #c3b8a6;
+    --cyber-green: #8d9a8d;
+    --text-primary: #f1ede4;
+    --text-secondary: #c6c0b5;
+    --bg-primary: #161513; /* smoky dark */
+    --bg-secondary: #1e1c1a;
+    --bg-tertiary: #24221f;
+    --border-color: #3a372f;
+    --shadow-light: 0 1px 0 rgba(0, 0, 0, 0.5);
+    --shadow-medium: 0 2px 6px rgba(0, 0, 0, 0.5);
+    --shadow-heavy: 0 6px 18px rgba(0, 0, 0, 0.6);
+    --glow-blue: none;
+    --glow-purple: none;
+    --glow-green: none;
+    --gradient-primary: linear-gradient(180deg, #b9b39f, #b9b39f);
+    --gradient-secondary: linear-gradient(180deg, #9e9885, #9e9885);
+    --gradient-cyber: linear-gradient(180deg, #b9b39f, #b9b39f);
 }
 
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Georgia', 'Times New Roman', serif;
     line-height: 1.6;
     color: var(--text-primary);
     background-color: var(--bg-primary);
-    background-image: 
-        radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.03) 0%, transparent 50%),
-        radial-gradient(circle at 75% 75%, rgba(139, 92, 246, 0.03) 0%, transparent 50%),
-        linear-gradient(45deg, transparent 48%, rgba(59, 130, 246, 0.02) 50%, transparent 52%),
-        linear-gradient(-45deg, transparent 48%, rgba(139, 92, 246, 0.02) 50%, transparent 52%);
-    background-size: 100px 100px, 150px 150px, 20px 20px, 20px 20px;
-    background-position: 0 0, 50px 50px, 0 0, 10px 10px;
-    transition: all 0.3s ease;
+    background-image:
+        repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.02) 0px, rgba(0, 0, 0, 0.02) 1px, transparent 1px, transparent 3px),
+        linear-gradient(0deg, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.02));
+    background-size: 100% 4px, 100% 100%;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    letter-spacing: 0.15px;
 }
 
 /* Typography */
@@ -202,8 +200,8 @@ p {
     position: fixed;
     top: 0;
     width: 100%;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
+    background: var(--bg-primary);
+    backdrop-filter: none;
     border-bottom: 1px solid var(--border-color);
     z-index: 50;
     transition: all 0.3s ease;
@@ -250,7 +248,6 @@ p {
 
 .nav-link:hover {
     color: var(--primary-color);
-    transform: translateY(-2px);
 }
 
 .nav-link::after {
@@ -403,8 +400,7 @@ p {
 }
 
 .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-medium);
+    box-shadow: var(--shadow-light);
 }
 
 .btn-secondary {
@@ -413,8 +409,7 @@ p {
 }
 
 .btn-secondary:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-medium);
+    box-shadow: var(--shadow-light);
 }
 
 .btn-outline {
@@ -426,7 +421,6 @@ p {
 .btn-outline:hover {
     background: var(--primary-color);
     color: white;
-    transform: translateY(-2px);
 }
 
 /* Profile Card */
@@ -442,8 +436,8 @@ p {
 }
 
 .profile-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    transform: none;
+    box-shadow: var(--shadow-medium);
 }
 
 .profile-img {
@@ -496,7 +490,7 @@ p {
 .scroll-arrow {
     width: 2px;
     height: 30px;
-    background: var(--primary-color);
+    background: var(--text-secondary);
     position: relative;
     animation: scroll 2s infinite;
 }
@@ -769,9 +763,9 @@ section {
 }
 
 .project-card:hover {
-    transform: translateY(-5px) scale(1.02);
-    box-shadow: var(--shadow-heavy), var(--glow-blue);
-    border-color: var(--primary-color);
+    transform: none;
+    box-shadow: var(--shadow-medium);
+    border-color: var(--border-color);
 }
 
 .project-image {
@@ -859,8 +853,8 @@ section {
 }
 
 .blog-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-heavy);
+    transform: none;
+    box-shadow: var(--shadow-medium);
 }
 
 .blog-image {
@@ -1184,7 +1178,7 @@ section {
 }
 
 .footer-section .social-links a:hover {
-    color: var(--primary-color);
+    color: var(--text-secondary);
 }
 
 .footer-bottom {
@@ -1385,15 +1379,149 @@ html {
 }
 
 .resume-download:hover {
-    transform: translateY(-2px);
     box-shadow: var(--shadow-medium);
 }
 
-<!-- Use your actual resume file name -->
-<a href="Piyush Gupta.pdf" class="btn btn-primary" download>
-  Download Resume
-</a>
+/* VHS Theme Overrides */
+/* Subtle chromatic aberration for key titles */
+.section-title, .hero-title {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    text-shadow:
+        0.6px 0 0 rgba(255, 0, 0, 0.25),
+        -0.6px 0 0 rgba(0, 255, 255, 0.25);
+}
 
-<img src="project1.png" alt="Project 1">
-<img src="project2.png" alt="Project 2">
-<img src="project3.png" alt="Project 3">
+/* Tone down neon effects on highlighted text */
+.highlight {
+    background: none;
+    color: var(--primary-color);
+    -webkit-text-fill-color: initial;
+}
+
+/* Old-school buttons: flatter, stuffy */
+.btn {
+    border-radius: 0.25rem;
+    letter-spacing: 0.2px;
+}
+
+/* Images: muted color profile + slight blur */
+.project-image img, .profile-img, .blog-image img {
+    filter: contrast(1.05) saturate(0.85) sepia(0.15) blur(0.1px);
+}
+
+/* Global scanlines + vignette */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+        repeating-linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0.08) 0px,
+            rgba(0, 0, 0, 0.08) 1px,
+            rgba(0, 0, 0, 0) 1px,
+            rgba(0, 0, 0, 0) 3px
+        );
+    mix-blend-mode: multiply;
+    opacity: 0.25;
+    z-index: 9998;
+    animation: scan-shift 6s linear infinite;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, rgba(0,0,0,0) 60%, rgba(0,0,0,0.25) 100%);
+    z-index: 9997;
+}
+
+@keyframes scan-shift {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 4px; }
+}
+
+/* Occasional jitter class applied via JS */
+.vhs-jitter {
+    transform: translateX(0.5px) translateY(0.2px);
+}
+
+/* VHS timestamp overlay */
+.vhs-timestamp {
+    position: fixed;
+    right: 18px;
+    bottom: 14px;
+    z-index: 9999;
+    pointer-events: none;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px;
+    line-height: 1;
+    letter-spacing: 1.2px;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow:
+        0.6px 0 0 rgba(255, 0, 0, 0.35),
+        -0.6px 0 0 rgba(0, 255, 255, 0.35),
+        0 0 2px rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.35);
+    padding: 6px 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+}
+
+.vhs-timestamp .rec-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-right: 6px;
+    border-radius: 50%;
+    background: #ff3b30;
+    box-shadow: 0 0 6px rgba(255, 59, 48, 0.9);
+    animation: rec-blink 1s steps(2, end) infinite;
+    vertical-align: -1px;
+}
+
+@keyframes rec-blink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0.2; }
+}
+
+/* Duller nav link underline */
+.nav-link::after {
+    background: var(--border-color);
+    box-shadow: none;
+}
+
+/* Tone down hero motto glow */
+.hero-motto {
+    color: var(--text-secondary);
+    text-shadow: none;
+    animation: none;
+}
+
+/* Remove neon card top bars */
+.project-card::before {
+    display: none;
+}
+
+/* Section transition overlay */
+.transition-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--bg-secondary);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 12000;
+}
+
+.transition-overlay.active {
+    animation: overlay-wipe 600ms ease-in-out forwards;
+}
+
+@keyframes overlay-wipe {
+    0% { opacity: 0; transform: translateY(0); }
+    20% { opacity: 1; transform: translateY(0); }
+    80% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(0); }
+}

@@ -54,12 +54,14 @@ function smoothScroll(e) {
     const targetSection = document.querySelector(targetId);
     
     if (targetSection) {
-        const offsetTop = targetSection.offsetTop - 70; // Account for fixed navbar
-        window.scrollTo({
-            top: offsetTop,
-            behavior: 'smooth'
+        animateSectionTransition(() => {
+            const offsetTop = targetSection.offsetTop - 70; // Account for fixed navbar
+            window.scrollTo({
+                top: offsetTop,
+                behavior: 'smooth'
+            });
+            closeMobileMenu();
         });
-        closeMobileMenu();
     }
 }
 
@@ -274,6 +276,66 @@ function initTypingAnimation() {
     }
 }
 
+// VHS timestamp overlay
+function formatVhsTimestamp(date) {
+    const pad = (n) => String(n).padStart(2, '0');
+    const yy = String(date.getFullYear()).slice(-2);
+    const mm = pad(date.getMonth() + 1);
+    const dd = pad(date.getDate());
+    const hh = pad(date.getHours());
+    const mi = pad(date.getMinutes());
+    const ss = pad(date.getSeconds());
+    return `${hh}:${mi}:${ss} ${dd}/${mm}/${yy}`;
+}
+
+function initVhsTimestamp() {
+    const stamp = document.createElement('div');
+    stamp.className = 'vhs-timestamp';
+    const now = new Date();
+    stamp.innerHTML = `<span class="rec-dot"></span>REC ${formatVhsTimestamp(now)}`;
+    document.body.appendChild(stamp);
+    setInterval(() => {
+        const t = new Date();
+        stamp.innerHTML = `<span class="rec-dot"></span>REC ${formatVhsTimestamp(t)}`;
+    }, 1000);
+}
+
+// Subtle random jitter to mimic VHS tracking hiccups
+function initVhsJitter() {
+    setInterval(() => {
+        if (Math.random() < 0.55) {
+            document.body.classList.add('vhs-jitter');
+            setTimeout(() => document.body.classList.remove('vhs-jitter'), 140);
+        }
+    }, 4500);
+}
+
+// Section transition overlay logic
+let transitionOverlayEl = null;
+function ensureTransitionOverlay() {
+    if (!transitionOverlayEl) {
+        transitionOverlayEl = document.createElement('div');
+        transitionOverlayEl.className = 'transition-overlay';
+        document.body.appendChild(transitionOverlayEl);
+    }
+}
+
+function animateSectionTransition(onMidpoint) {
+    ensureTransitionOverlay();
+    transitionOverlayEl.classList.remove('active');
+    // Force reflow to restart animation
+    void transitionOverlayEl.offsetWidth;
+    transitionOverlayEl.classList.add('active');
+    // Execute action near the midpoint of the overlay animation
+    setTimeout(() => {
+        try { onMidpoint && onMidpoint(); } catch (_) {}
+    }, 250);
+    // Clear overlay after animation completes
+    setTimeout(() => {
+        transitionOverlayEl.classList.remove('active');
+    }, 650);
+}
+
 // Event Listeners
 themeToggle.addEventListener('click', toggleTheme);
 hamburger.addEventListener('click', toggleMobileMenu);
@@ -305,6 +367,8 @@ document.addEventListener('DOMContentLoaded', () => {
     updateActiveNavLink();
     animateOnScroll();
     initTypingAnimation();
+    initVhsTimestamp();
+    initVhsJitter();
     
     // Observe sections for entrance animations
     const sections = document.querySelectorAll('section[id]');
@@ -348,9 +412,9 @@ document.addEventListener('DOMContentLoaded', () => {
 function preloadImages() {
     const imageUrls = [
         'profile.jpg',
-        'project1.jpg',
-        'project2.jpg',
-        'project3.jpg',
+        'project1.png',
+        'project2.png',
+        'project3.png',
         'blog1.jpg',
         'blog2.jpg'
     ];
@@ -376,12 +440,14 @@ function smoothScroll(e) {
     const targetSection = document.querySelector(targetId);
     
     if (targetSection) {
-        const offsetTop = targetSection.offsetTop - 70;
-        window.scrollTo({
-            top: offsetTop,
-            behavior: 'smooth'
+        animateSectionTransition(() => {
+            const offsetTop = targetSection.offsetTop - 70;
+            window.scrollTo({
+                top: offsetTop,
+                behavior: 'smooth'
+            });
+            closeMobileMenu();
         });
-        closeMobileMenu();
     }
 }
 
