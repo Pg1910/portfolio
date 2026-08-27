@@ -1,16 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" font-family="ui-monospace, 'SF Mono', Menlo, monospace">
-  <rect width="800" height="500" fill="#f2f0ec"/>
+  <rect width="800" height="500" fill="#eef1f5"/>
   <!-- pixel grid -->
   <g transform="translate(70,90)">
-    <g fill="#e6e1d8">
+    <g fill="#e2e7ee">
       <rect width="320" height="320"/>
     </g>
-    <g stroke="#d3ccc1" stroke-width="1">
+    <g stroke="#d0d5dd" stroke-width="1">
       <path d="M40,0V320 M80,0V320 M120,0V320 M160,0V320 M200,0V320 M240,0V320 M280,0V320"/>
       <path d="M0,40H320 M0,80H320 M0,120H320 M0,160H320 M0,200H320 M0,240H320 M0,280H320"/>
     </g>
     <!-- tumor mass pixels -->
-    <g fill="#b4530a">
+    <g fill="#175cd3">
       <rect x="120" y="80" width="40" height="40" opacity="0.28"/>
       <rect x="160" y="80" width="40" height="40" opacity="0.45"/>
       <rect x="120" y="120" width="40" height="40" opacity="0.6"/>
@@ -21,30 +21,30 @@
       <rect x="200" y="160" width="40" height="40" opacity="0.3"/>
     </g>
     <!-- predicted mask contour -->
-    <path d="M120,80 h80 v40 h40 v80 h-40 v-0 h-80 z" fill="none" stroke="#7a3506" stroke-width="2.5" stroke-dasharray="7 5"/>
-    <rect width="320" height="320" fill="none" stroke="#57534c" stroke-width="1.5"/>
+    <path d="M120,80 h80 v40 h40 v80 h-40 v-0 h-80 z" fill="none" stroke="#0f3d8c" stroke-width="2.5" stroke-dasharray="7 5"/>
+    <rect width="320" height="320" fill="none" stroke="#475467" stroke-width="1.5"/>
   </g>
   <!-- U-Net motif -->
-  <g transform="translate(470,120)" fill="#57534c">
+  <g transform="translate(470,120)" fill="#475467">
     <rect x="0" y="0" width="16" height="88"/>
     <rect x="30" y="26" width="16" height="62" opacity="0.8"/>
     <rect x="60" y="52" width="16" height="36" opacity="0.6"/>
-    <rect x="90" y="70" width="16" height="18" fill="#b4530a"/>
+    <rect x="90" y="70" width="16" height="18" fill="#175cd3"/>
     <rect x="120" y="52" width="16" height="36" opacity="0.6"/>
     <rect x="150" y="26" width="16" height="62" opacity="0.8"/>
     <rect x="180" y="0" width="16" height="88"/>
     <!-- skip connections -->
-    <g stroke="#b4530a" stroke-width="1.5" fill="none" opacity="0.7">
+    <g stroke="#175cd3" stroke-width="1.5" fill="none" opacity="0.7">
       <path d="M16,10 H180"/>
       <path d="M46,36 H150"/>
       <path d="M76,58 H120"/>
     </g>
   </g>
-  <text x="470" y="258" font-size="13" letter-spacing="2" fill="#8a857c">CUSTOM U-NET · SKIP CONNECTIONS</text>
+  <text x="470" y="258" font-size="13" letter-spacing="2" fill="#8494ab">CUSTOM U-NET · SKIP CONNECTIONS</text>
   <g transform="translate(470,300)">
-    <text y="0" font-size="13" letter-spacing="2" fill="#8a857c">INPUT 128×128×3</text>
-    <text y="28" font-size="13" letter-spacing="2" fill="#8a857c">MASK 128×128×1</text>
-    <text y="66" font-size="13" letter-spacing="2" fill="#b4530a">TERAHERTZ MODALITY</text>
+    <text y="0" font-size="13" letter-spacing="2" fill="#8494ab">INPUT 128×128×3</text>
+    <text y="28" font-size="13" letter-spacing="2" fill="#8494ab">MASK 128×128×1</text>
+    <text y="66" font-size="13" letter-spacing="2" fill="#175cd3">TERAHERTZ MODALITY</text>
   </g>
-  <text x="70" y="60" font-size="15" letter-spacing="3" fill="#8a857c">TUMOR SEGMENTATION</text>
+  <text x="70" y="60" font-size="15" letter-spacing="3" fill="#8494ab">TUMOR SEGMENTATION</text>
 </svg>

@@ -86,8 +86,8 @@ document.getElementById('year').textContent = new Date().getFullYear();
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const palette = {
-        light: { node: '138, 131, 122', accent: '180, 83, 10' },
-        dark: { node: '125, 120, 111', accent: '224, 138, 76' }
+        light: { node: '130, 139, 155', accent: '23, 92, 211' },
+        dark: { node: '102, 112, 133', accent: '82, 139, 255' }
     };
 
     let w, h, dpr, nodes = [];

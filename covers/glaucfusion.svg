@@ -1,13 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" font-family="ui-monospace, 'SF Mono', Menlo, monospace">
-  <rect width="800" height="500" fill="#f2f0ec"/>
+  <rect width="800" height="500" fill="#eef1f5"/>
   <!-- fundus / retina -->
   <g transform="translate(270,250)">
-    <circle r="170" fill="#ece7df" stroke="#d8d2c8" stroke-width="1.5"/>
-    <circle r="170" fill="none" stroke="#b4530a" stroke-width="1" opacity="0.25"/>
-    <circle r="128" fill="none" stroke="#c9c2b6" stroke-width="1"/>
-    <circle r="86" fill="none" stroke="#c9c2b6" stroke-width="1"/>
+    <circle r="170" fill="#e4e9f0" stroke="#d0d5dd" stroke-width="1.5"/>
+    <circle r="170" fill="none" stroke="#175cd3" stroke-width="1" opacity="0.25"/>
+    <circle r="128" fill="none" stroke="#cbd2dc" stroke-width="1"/>
+    <circle r="86" fill="none" stroke="#cbd2dc" stroke-width="1"/>
     <!-- vessels -->
-    <g stroke="#a89f90" stroke-width="2" fill="none" stroke-linecap="round">
+    <g stroke="#98a2b3" stroke-width="2" fill="none" stroke-linecap="round">
       <path d="M-40,-30 C-80,-70 -110,-80 -140,-95"/>
       <path d="M-40,-30 C-60,-90 -50,-120 -60,-150"/>
       <path d="M-38,-22 C-100,-10 -130,10 -158,28"/>
@@ -16,38 +16,38 @@
       <path d="M-32,-26 C30,-60 80,-90 120,-100"/>
     </g>
     <!-- optic disc / cup -->
-    <circle cx="-38" cy="-24" r="34" fill="#e4b489" opacity="0.75"/>
-    <circle cx="-38" cy="-24" r="18" fill="#b4530a" opacity="0.75"/>
+    <circle cx="-38" cy="-24" r="34" fill="#a8c2ed" opacity="0.75"/>
+    <circle cx="-38" cy="-24" r="18" fill="#175cd3" opacity="0.75"/>
     <!-- segmentation contour -->
-    <circle cx="-38" cy="-24" r="44" fill="none" stroke="#b4530a" stroke-width="2" stroke-dasharray="6 5"/>
+    <circle cx="-38" cy="-24" r="44" fill="none" stroke="#175cd3" stroke-width="2" stroke-dasharray="6 5"/>
     <!-- scan line -->
-    <line x1="-170" y1="52" x2="170" y2="52" stroke="#b4530a" stroke-width="1.5" opacity="0.5"/>
+    <line x1="-170" y1="52" x2="170" y2="52" stroke="#175cd3" stroke-width="1.5" opacity="0.5"/>
   </g>
   <!-- ViT patch grid -->
-  <g transform="translate(500,96)" stroke="#57534c" fill="none" opacity="0.9">
+  <g transform="translate(500,96)" stroke="#475467" fill="none" opacity="0.9">
     <g stroke-width="1.2">
       <rect x="0" y="0" width="150" height="150"/>
       <line x1="50" y1="0" x2="50" y2="150"/><line x1="100" y1="0" x2="100" y2="150"/>
       <line x1="0" y1="50" x2="150" y2="50"/><line x1="0" y1="100" x2="150" y2="100"/>
     </g>
-    <rect x="50" y="50" width="50" height="50" fill="#b4530a" opacity="0.55" stroke="none"/>
-    <rect x="100" y="0" width="50" height="50" fill="#b4530a" opacity="0.25" stroke="none"/>
-    <rect x="0" y="100" width="50" height="50" fill="#b4530a" opacity="0.18" stroke="none"/>
+    <rect x="50" y="50" width="50" height="50" fill="#175cd3" opacity="0.55" stroke="none"/>
+    <rect x="100" y="0" width="50" height="50" fill="#175cd3" opacity="0.25" stroke="none"/>
+    <rect x="0" y="100" width="50" height="50" fill="#175cd3" opacity="0.18" stroke="none"/>
   </g>
   <!-- attention / fusion nodes -->
   <g transform="translate(500,300)">
-    <g fill="none" stroke="#a89f90" stroke-width="1.2">
+    <g fill="none" stroke="#98a2b3" stroke-width="1.2">
       <path d="M20,20 L120,60"/><path d="M20,60 L120,60"/><path d="M20,100 L120,60"/>
       <path d="M120,60 L210,40"/><path d="M120,60 L210,84"/>
     </g>
-    <circle cx="20" cy="20" r="7" fill="#57534c"/>
-    <circle cx="20" cy="60" r="7" fill="#57534c"/>
-    <circle cx="20" cy="100" r="7" fill="#57534c"/>
-    <circle cx="120" cy="60" r="9" fill="#b4530a"/>
-    <circle cx="210" cy="40" r="7" fill="none" stroke="#57534c" stroke-width="2"/>
-    <circle cx="210" cy="84" r="7" fill="none" stroke="#57534c" stroke-width="2"/>
+    <circle cx="20" cy="20" r="7" fill="#475467"/>
+    <circle cx="20" cy="60" r="7" fill="#475467"/>
+    <circle cx="20" cy="100" r="7" fill="#475467"/>
+    <circle cx="120" cy="60" r="9" fill="#175cd3"/>
+    <circle cx="210" cy="40" r="7" fill="none" stroke="#475467" stroke-width="2"/>
+    <circle cx="210" cy="84" r="7" fill="none" stroke="#475467" stroke-width="2"/>
   </g>
-  <text x="40" y="60" font-size="15" letter-spacing="3" fill="#8a857c">FUNDUS → SEGMENT → CLASSIFY</text>
-  <text x="500" y="282" font-size="13" letter-spacing="2" fill="#8a857c">DUAL-BRANCH FUSION</text>
-  <text x="40" y="462" font-size="13" letter-spacing="2" fill="#b4530a">GON+ / GON−</text>
+  <text x="40" y="60" font-size="15" letter-spacing="3" fill="#8494ab">FUNDUS → SEGMENT → CLASSIFY</text>
+  <text x="500" y="282" font-size="13" letter-spacing="2" fill="#8494ab">DUAL-BRANCH FUSION</text>
+  <text x="40" y="462" font-size="13" letter-spacing="2" fill="#175cd3">GON+ / GON−</text>
 </svg>
