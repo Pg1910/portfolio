@@ -1,716 +1,186 @@
-// DOM Elements
+// Theme
 const themeToggle = document.getElementById('themeToggle');
-const body = document.body;
-const hamburger = document.querySelector('.hamburger');
-const navMenu = document.querySelector('.nav-menu');
-const navLinks = document.querySelectorAll('.nav-link');
-const contactForm = document.getElementById('contactForm');
-const botToggle = document.getElementById('botToggle');
-const botChat = document.getElementById('botChat');
-const botClose = document.getElementById('botClose');
-const botMessages = document.getElementById('botMessages');
-const botInput = document.getElementById('botInput');
-const botSend = document.getElementById('botSend');
+const savedTheme = localStorage.getItem('theme');
+const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+let theme = savedTheme || (prefersDark ? 'dark' : 'light');
+document.documentElement.setAttribute('data-theme', theme);
 
-// Animation Elements
-const sections = document.querySelectorAll('section');
+themeToggle.addEventListener('click', () => {
+    theme = theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+});
 
-// Theme Management
-let currentTheme = localStorage.getItem('theme') || 'light';
-body.setAttribute('data-theme', currentTheme);
-updateThemeIcon();
+// Mobile menu
+const menuToggle = document.getElementById('menuToggle');
+const siteNav = document.getElementById('siteNav');
 
-function toggleTheme() {
-    currentTheme = currentTheme === 'light' ? 'dark' : 'light';
-    body.setAttribute('data-theme', currentTheme);
-    localStorage.setItem('theme', currentTheme);
-    updateThemeIcon();
+function closeMenu() {
+    siteNav.classList.remove('open');
+    menuToggle.setAttribute('aria-expanded', 'false');
 }
 
-function updateThemeIcon() {
-    const icon = themeToggle.querySelector('i');
-    if (currentTheme === 'dark') {
-        icon.className = 'fas fa-sun';
-    } else {
-        icon.className = 'fas fa-moon';
-    }
-}
+menuToggle.addEventListener('click', () => {
+    const open = siteNav.classList.toggle('open');
+    menuToggle.setAttribute('aria-expanded', String(open));
+});
 
-// Mobile Navigation
-function toggleMobileMenu() {
-    hamburger.classList.toggle('active');
-    navMenu.classList.toggle('active');
-}
+siteNav.querySelectorAll('.nav-link').forEach(link =>
+    link.addEventListener('click', closeMenu)
+);
 
-function closeMobileMenu() {
-    hamburger.classList.remove('active');
-    navMenu.classList.remove('active');
-}
-
-// Smooth Scrolling for Navigation Links
-function smoothScroll(e) {
-    e.preventDefault();
-    const targetId = this.getAttribute('href');
-    const targetSection = document.querySelector(targetId);
-    
-    if (targetSection) {
-        animateSectionTransition(() => {
-            const offsetTop = targetSection.offsetTop - 70; // Account for fixed navbar
-            window.scrollTo({
-                top: offsetTop,
-                behavior: 'smooth'
-            });
-            closeMobileMenu();
-        });
-    }
-}
-
-// Active Navigation Link Highlighting
-function updateActiveNavLink() {
-    const sections = document.querySelectorAll('section[id]');
-    const scrollPos = window.scrollY + 100;
-
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.offsetHeight;
-        const sectionId = section.getAttribute('id');
-        const navLink = document.querySelector(`.nav-link[href="#${sectionId}"]`);
-
-        if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
-            navLink?.classList.add('active');
-        } else {
-            navLink?.classList.remove('active');
+// Scroll reveal
+const revealObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('in');
+            revealObserver.unobserve(entry.target);
         }
     });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// Research lists
+const papers = [
+    { title: 'Attention Is All You Need', link: 'https://arxiv.org/abs/1706.03762' },
+    { title: 'VGGT: Visual Geometry Grounded Transformer', link: 'https://arxiv.org/abs/2503.11651' },
+    { title: 'GONet: A Generalizable Deep Learning Model for Glaucoma Detection', link: 'https://arxiv.org/abs/2502.19514' },
+    { title: 'U-Net: Convolutional Networks for Biomedical Image Segmentation', link: 'https://arxiv.org/abs/1505.04597' },
+    { title: 'Very Deep Convolutional Networks for Large-Scale Image Recognition (VGGNet)', link: 'https://arxiv.org/abs/1409.1556' },
+    { title: 'Going Deeper with Convolutions (Inception/GoogLeNet)', link: 'https://arxiv.org/abs/1409.4842' },
+    { title: 'Faster R-CNN: Towards Real-Time Object Detection', link: 'https://arxiv.org/abs/1506.01497' },
+    { title: 'Fully Convolutional Networks for Semantic Segmentation (FCN)', link: 'https://arxiv.org/abs/1411.4038' },
+    { title: 'You Only Look Once: Unified, Real-Time Object Detection (YOLO)', link: 'https://arxiv.org/abs/1506.02640' }
+];
+
+const datasets = [
+    { name: 'xView', link: 'https://xviewdataset.org' },
+    { name: 'RarePlanes', link: 'https://rareplanes.org' },
+    { name: 'LEVIR-CD', link: 'https://justchenhao.github.io/LEVIR/' },
+    { name: 'WHU-CD', link: 'https://study.rsgis.whu.edu.cn/pages/download/building_dataset.html' },
+    { name: 'DOTA', link: 'https://captain-whu.github.io/DOTA/' },
+    { name: 'ORIGA', link: 'https://refuge.grand-challenge.org/datasets/' },
+    { name: 'REFUGE', link: 'https://refuge.grand-challenge.org/' },
+    { name: 'DRISHTI-GS', link: 'https://cvit.iiit.ac.in/projects/mip/drishti-gs/' },
+    { name: 'EyePACS (AIROGS-Light v2)', link: 'https://airogs.grand-challenge.org/' }
+];
+
+function renderLinks(listEl, items) {
+    listEl.innerHTML = items
+        .map(i => `<li><a href="${i.link}" target="_blank" rel="noopener">${i.title || i.name}</a></li>`)
+        .join('');
 }
 
-// Contact Form Handling
-function handleContactForm(e) {
-    e.preventDefault();
-    
-    const formData = new FormData(contactForm);
-    const data = {
-        name: formData.get('name'),
-        email: formData.get('email'),
-        subject: formData.get('subject'),
-        message: formData.get('message')
+renderLinks(document.getElementById('paperList'), papers);
+renderLinks(document.getElementById('datasetList'), datasets);
+
+// Footer year
+document.getElementById('year').textContent = new Date().getFullYear();
+
+// Ambient background: slow-drifting node network
+(function () {
+    const canvas = document.getElementById('bgCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const palette = {
+        light: { node: '138, 131, 122', accent: '180, 83, 10' },
+        dark: { node: '125, 120, 111', accent: '224, 138, 76' }
     };
 
-    // Send via mailto (opens default email client)
-    const to = 'gguptapiyush45@gmail.com';
-    const subject = encodeURIComponent(`[Portfolio] ${data.subject || 'New message'}`);
-    const bodyLines = [
-        `Name: ${data.name || '-'} `,
-        `Email: ${data.email || '-'} `,
-        '',
-        (data.message || '').trim()
-    ];
-    const body = encodeURIComponent(bodyLines.join('\n'));
-    const cc = data.email ? `&cc=${encodeURIComponent(data.email)}` : '';
-    const mailtoUrl = `mailto:${to}?subject=${subject}&body=${body}${cc}`;
+    let w, h, dpr, nodes = [];
+    const mouse = { x: null, y: null };
+    const LINK_DIST = 140;
+    const MOUSE_DIST = 200;
 
-    // Try opening the mail client
-    const link = document.createElement('a');
-    link.href = mailtoUrl;
-    link.style.display = 'none';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    // Best-effort: copy composed email content to clipboard for fallback
-    const clipboardText = `To: ${to}\n${data.email ? `CC: ${data.email}\n` : ''}Subject: [Portfolio] ${data.subject || 'New message'}\n\n${bodyLines.join('\n')}`;
-    if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(clipboardText).catch(() => {});
+    function resize() {
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        w = window.innerWidth;
+        h = window.innerHeight;
+        canvas.width = w * dpr;
+        canvas.height = h * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        seed();
     }
 
-    // Inform the user
-    showNotification('Opening your email app... If it does not open, the message content has been copied to your clipboard.', 'success');
-    contactForm.reset();
-}
-
-function showNotification(message, type = 'info') {
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.textContent = message;
-    
-    // Add styles
-    notification.style.cssText = `
-        position: fixed;
-        top: 100px;
-        right: 20px;
-        padding: 1rem 1.5rem;
-        border-radius: 0.5rem;
-        color: white;
-        font-weight: 500;
-        z-index: 10000;
-        transform: translateX(100%);
-        transition: transform 0.3s ease;
-        max-width: 300px;
-    `;
-    
-    if (type === 'success') {
-        notification.style.background = '#10b981';
-    } else if (type === 'error') {
-        notification.style.background = '#ef4444';
-    } else {
-        notification.style.background = '#3b82f6';
-    }
-    
-    document.body.appendChild(notification);
-    
-    // Animate in
-    setTimeout(() => {
-        notification.style.transform = 'translateX(0)';
-    }, 100);
-    
-    // Remove after 5 seconds
-    setTimeout(() => {
-        notification.style.transform = 'translateX(100%)';
-        setTimeout(() => {
-            document.body.removeChild(notification);
-        }, 300);
-    }, 5000);
-}
-
-// WhatsApp Chat Bot
-const profileData = {
-    name: 'Piyush Gupta',
-    title: 'Machine Learning Engineer',
-    location: 'Bengaluru, India / Kurnool, Andhra Pradesh',
-    education: {
-        degree: 'B.Tech Mechanical Engineering',
-        institute: 'IIITDM Kurnool, Andhra Pradesh'
-    },
-    contact: {
-        email: 'gguptapiyush45@gmail.com',
-        linkedin: 'https://linkedin.com/in/piyush-gupta-200416309',
-        github: 'https://github.com/Pg1910',
-        twitter: 'https://x.com/Gupta_piyush03',
-        blog: 'https://substack.com/@piyushgupta114232',
-        resume: 'Piyush_resume.pdf'
-    },
-    skills: {
-        languages: ['Python', 'C++', 'Java', 'R'],
-        frameworks: ['PyTorch', 'TensorFlow', 'Hugging Face', 'OpenCV', 'scikit-learn'],
-        tools: ['Git', 'Docker', 'AWS', 'Google Cloud', 'React', 'Django']
-    },
-    projects: [
-        { name: 'GlaucFusion', url: 'https://github.com/Pg1910/glaucoma-detection-ai', desc: 'Segmentation-aware glaucoma diagnosis with ViT' },
-        { name: 'SCRIBE', url: 'https://github.com/Pg1910/SCRIBE-Smart-Content-Reporting-Intelligence-for-Blogging-Engagement', desc: 'Content analysis for blogging engagement' },
-        { name: 'Breast Cancer Segmentation', url: 'https://github.com/Pg1910/breast_cancer_image_segmentation_of_terahertz_images_using_customUNET', desc: 'Custom UNET for terahertz images' }
-    ],
-    experience: [
-        { role: 'Image Processing Research Intern', company: 'AnyTechPros', duration: 'July 2024 - Present' },
-        { role: 'ML Research Intern', company: 'MANIT Bhopal', duration: 'June 2024' },
-        { role: 'SDE Intern', company: 'Bluestock Fintech Pvt Ltd', duration: 'May 2024 - June 2024' },
-        { role: 'Samsung PRISM Intern', company: 'IIITDM Kurnool', duration: 'Dec 2024 - Mar 2025' }
-    ],
-    availability: {
-        summary: 'Open to ML/AI Engineer, Computer Vision, and Research roles (internships and full-time). Remote/hybrid welcome. Timeline flexible—please email to coordinate.'
-    }
-};
-let botOpen = false;
-
-function toggleBot() {
-    botOpen = !botOpen;
-    if (botOpen) {
-        botChat.classList.add('active');
-        botInput.focus();
-        // Show quick suggestions on open
-        renderBotSuggestions(['resume', 'projects', 'skills', 'experience', 'contact', 'availability']);
-    } else {
-        botChat.classList.remove('active');
-    }
-}
-
-function closeBot() {
-    botOpen = false;
-    botChat.classList.remove('active');
-}
-
-function sendBotMessage() {
-    const message = botInput.value.trim();
-    if (!message) return;
-    
-    // Add user message
-    addBotMessage(message, 'user');
-    botInput.value = '';
-    
-    // Simulate bot response
-    setTimeout(() => {
-        const result = generateBotResponse(message);
-        const text = typeof result === 'string' ? result : result.text;
-        addBotMessage(text, 'bot');
-        if (typeof result === 'object' && Array.isArray(result.suggestions)) {
-            renderBotSuggestions(result.suggestions);
-        } else {
-            renderBotSuggestions(['resume', 'projects', 'skills', 'experience', 'contact']);
-        }
-    }, 1000);
-}
-
-function addBotMessage(message, sender) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `bot-message ${sender}-message`;
-    messageDiv.style.cssText = `
-        background: ${sender === 'user' ? 'var(--primary-color)' : 'var(--bg-secondary)'};
-        color: ${sender === 'user' ? 'white' : 'var(--text-primary)'};
-        margin-left: ${sender === 'user' ? 'auto' : '0'};
-        margin-right: ${sender === 'user' ? '0' : 'auto'};
-        max-width: 80%;
-        padding: 0.75rem;
-        border-radius: 1rem;
-        margin-bottom: 1rem;
-    `;
-    
-    const messageP = document.createElement('p');
-    if (sender === 'bot') {
-        messageP.innerHTML = message;
-    } else {
-        messageP.textContent = message;
-    }
-    messageP.style.margin = '0';
-    
-    messageDiv.appendChild(messageP);
-    botMessages.appendChild(messageDiv);
-    botMessages.scrollTop = botMessages.scrollHeight;
-}
-
-function generateBotResponse(userMessage) {
-    const text = userMessage.toLowerCase();
-    const clean = text.replace(/[^a-z0-9\s]/g, ' ');
-    const includes = (arr) => arr.some(k => clean.includes(k));
-
-    // Greeting
-    if (includes(['hello', 'hi ', 'hey', 'greetings', 'namaste'])) {
-        return {
-            text: `Hello! I'm Piyush's assistant. How can I help you today? Try asking for <b>resume</b>, <b>projects</b>, <b>skills</b>, <b>experience</b>, <b>contact</b>, or <b>availability</b>.`,
-            suggestions: ['resume', 'projects', 'skills', 'experience', 'contact', 'availability']
-        };
+    function seed() {
+        const count = Math.min(90, Math.round((w * h) / 24000));
+        nodes = Array.from({ length: count }, () => ({
+            x: Math.random() * w,
+            y: Math.random() * h,
+            vx: (Math.random() - 0.5) * 0.35,
+            vy: (Math.random() - 0.5) * 0.35,
+            r: 1 + Math.random() * 1.6,
+            accent: Math.random() < 0.12
+        }));
     }
 
-    // Resume
-    if (includes(['resume', 'cv', 'curriculum'])) {
-        return {
-            text: `You can download the resume here: <a href="${profileData.contact.resume}" target="_blank">Download Resume (PDF)</a>.`,
-            suggestions: ['skills', 'experience', 'projects', 'contact']
-        };
+    function colors() {
+        const theme = document.documentElement.getAttribute('data-theme');
+        return palette[theme === 'dark' ? 'dark' : 'light'];
     }
 
-    // Contact
-    if (includes(['contact', 'email', 'reach', 'connect'])) {
-        return {
-            text: `Email: <a href="mailto:${profileData.contact.email}">${profileData.contact.email}</a><br>LinkedIn: <a href="${profileData.contact.linkedin}" target="_blank">LinkedIn Profile</a><br>GitHub: <a href="${profileData.contact.github}" target="_blank">@Pg1910</a>`,
-            suggestions: ['resume', 'projects', 'availability']
-        };
-    }
+    function draw() {
+        const c = colors();
+        ctx.clearRect(0, 0, w, h);
 
-    // Phone
-    if (includes(['phone', 'call', 'mobile', 'number'])) {
-        return {
-            text: `Phone details are shared on request. Please email at <a href="mailto:${profileData.contact.email}">${profileData.contact.email}</a>.`,
-            suggestions: ['email', 'linkedin']
-        };
-    }
-
-    // Skills / Tech Stack
-    if (includes(['skill', 'stack', 'technology', 'tech', 'tools', 'language', 'framework'])) {
-        const s = profileData.skills;
-        return {
-            text: `<b>Languages:</b> ${s.languages.join(', ')}<br><b>Frameworks:</b> ${s.frameworks.join(', ')}<br><b>Tools:</b> ${s.tools.join(', ')}`,
-            suggestions: ['projects', 'experience', 'resume']
-        };
-    }
-
-    // Experience
-    if (includes(['experience', 'intern', 'work history', 'roles', 'timeline'])) {
-        const lines = profileData.experience.map(e => `• ${e.role} — ${e.company} (${e.duration})`).join('<br>');
-        return {
-            text: `${lines}`,
-            suggestions: ['skills', 'projects', 'resume']
-        };
-    }
-
-    // Education
-    if (includes(['education', 'degree', 'college', 'university', 'btech'])) {
-        const ed = profileData.education;
-        return {
-            text: `${ed.degree}<br>${ed.institute}`,
-            suggestions: ['skills', 'projects', 'resume']
-        };
-    }
-
-    // Location / Work Mode
-    if (includes(['location', 'based', 'where', 'city', 'relocate', 'relocation', 'remote', 'hybrid', 'onsite'])) {
-        return {
-            text: `Based in ${profileData.location}. Open to remote and hybrid roles; relocation can be discussed.`,
-            suggestions: ['availability', 'contact']
-        };
-    }
-
-    // Availability
-    if (includes(['available', 'availability', 'joining', 'join', 'start', 'notice', 'hiring', 'open to work', 'opportunity', 'role', 'position'])) {
-        return {
-            text: `${profileData.availability.summary}`,
-            suggestions: ['contact', 'resume', 'skills']
-        };
-    }
-
-    // Projects / Portfolio
-    if (includes(['project', 'portfolio', 'work', 'code', 'repo', 'github'])) {
-        const p = profileData.projects
-            .map(pr => `• <b>${pr.name}</b> — ${pr.desc} (<a href="${pr.url}" target="_blank">code</a>)`)
-            .join('<br>');
-        return {
-            text: `${p}<br>GitHub: <a href="${profileData.contact.github}" target="_blank">${profileData.contact.github}</a>`,
-            suggestions: ['skills', 'experience', 'resume']
-        };
-    }
-
-    // LinkedIn
-    if (includes(['linkedin'])) {
-        return { text: `LinkedIn: <a href="${profileData.contact.linkedin}" target="_blank">Profile</a>`, suggestions: ['contact', 'resume'] };
-    }
-
-    // Blog / Writing
-    if (includes(['blog', 'substack', 'article', 'write', 'writing'])) {
-        return { text: `Blog: <a href="${profileData.contact.blog}" target="_blank">Substack</a>`, suggestions: ['projects', 'resume'] };
-    }
-
-    if (includes(['thank', 'thanks', 'thank you'])) {
-        return { text: `You're welcome!`, suggestions: ['resume', 'projects', 'contact'] };
-    }
-
-    return {
-        text: `I can help with <b>resume</b>, <b>projects</b>, <b>skills</b>, <b>experience</b>, <b>education</b>, <b>contact</b>, <b>availability</b>, and <b>location</b>. Try typing one of those keywords or tap a suggestion below.`,
-        suggestions: ['resume', 'projects', 'skills', 'experience', 'education', 'contact']
-    };
-}
-
-// Suggestions UI
-let suggestionsContainer = null;
-function ensureSuggestionsContainer() {
-    if (!suggestionsContainer) {
-        suggestionsContainer = document.createElement('div');
-        suggestionsContainer.id = 'botSuggestions';
-        suggestionsContainer.className = 'bot-suggestions';
-        // Insert below messages, above input
-        const parent = document.getElementById('botChat');
-        parent.insertBefore(suggestionsContainer, parent.querySelector('.bot-input'));
-    }
-}
-
-function renderBotSuggestions(suggestions) {
-    ensureSuggestionsContainer();
-    suggestionsContainer.innerHTML = '';
-    suggestions.slice(0, 6).forEach(s => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.textContent = s;
-        btn.addEventListener('click', () => {
-            botInput.value = s;
-            sendBotMessage();
-        });
-        suggestionsContainer.appendChild(btn);
-    });
-}
-
-// Scroll Animations
-function animateOnScroll() {
-    const elements = document.querySelectorAll('.fade-in-up, .fade-in-left, .fade-in-right, .scale-in, .stagger-item');
-    
-    elements.forEach(element => {
-        const elementTop = element.getBoundingClientRect().top;
-        const elementVisible = 100;
-        
-        if (elementTop < window.innerHeight - elementVisible) {
-            element.classList.add('animate-in');
-        }
-    });
-}
-
-// Typing Animation for Hero Title
-function typeWriter(element, text, speed = 100) {
-    let i = 0;
-    element.innerHTML = '';
-    
-    function type() {
-        if (i < text.length) {
-            element.innerHTML += text.charAt(i);
-            i++;
-            setTimeout(type, speed);
-        }
-    }
-    
-    type();
-}
-
-// Initialize Typing Animation
-function initTypingAnimation() {
-    const heroTitle = document.querySelector('.hero-title');
-    if (heroTitle) {
-        const originalText = heroTitle.innerHTML;
-        const highlightSpan = heroTitle.querySelector('.highlight');
-        const highlightText = highlightSpan ? highlightSpan.textContent : '';
-        
-        // Reset to show full text initially
-        heroTitle.innerHTML = originalText;
-        
-        // Add typing effect on scroll or after a delay
-        setTimeout(() => {
-            if (highlightSpan) {
-                highlightSpan.innerHTML = '';
-                typeWriter(highlightSpan, highlightText, 150);
+        for (let i = 0; i < nodes.length; i++) {
+            const a = nodes[i];
+            for (let j = i + 1; j < nodes.length; j++) {
+                const b = nodes[j];
+                const dx = a.x - b.x, dy = a.y - b.y;
+                const d = Math.hypot(dx, dy);
+                if (d < LINK_DIST) {
+                    ctx.strokeStyle = `rgba(${c.node}, ${0.14 * (1 - d / LINK_DIST)})`;
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.moveTo(a.x, a.y);
+                    ctx.lineTo(b.x, b.y);
+                    ctx.stroke();
+                }
             }
-        }, 1000);
-    }
-}
-
-// VHS timestamp overlay
-function formatVhsTimestamp(date) {
-    const pad = (n) => String(n).padStart(2, '0');
-    const yy = String(date.getFullYear()).slice(-2);
-    const mm = pad(date.getMonth() + 1);
-    const dd = pad(date.getDate());
-    const hh = pad(date.getHours());
-    const mi = pad(date.getMinutes());
-    const ss = pad(date.getSeconds());
-    return `${hh}:${mi}:${ss} ${dd}/${mm}/${yy}`;
-}
-
-function initVhsTimestamp() {
-    const stamp = document.createElement('div');
-    stamp.className = 'vhs-timestamp';
-    const now = new Date();
-    stamp.innerHTML = `<span class="rec-dot"></span>REC ${formatVhsTimestamp(now)}`;
-    document.body.appendChild(stamp);
-    setInterval(() => {
-        const t = new Date();
-        stamp.innerHTML = `<span class="rec-dot"></span>REC ${formatVhsTimestamp(t)}`;
-    }, 1000);
-}
-
-// Subtle random jitter to mimic VHS tracking hiccups
-function initVhsJitter() {
-    setInterval(() => {
-        if (Math.random() < 0.55) {
-            document.body.classList.add('vhs-jitter');
-            setTimeout(() => document.body.classList.remove('vhs-jitter'), 140);
+            if (mouse.x !== null) {
+                const d = Math.hypot(a.x - mouse.x, a.y - mouse.y);
+                if (d < MOUSE_DIST) {
+                    ctx.strokeStyle = `rgba(${c.accent}, ${0.22 * (1 - d / MOUSE_DIST)})`;
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.moveTo(a.x, a.y);
+                    ctx.lineTo(mouse.x, mouse.y);
+                    ctx.stroke();
+                }
+            }
         }
-    }, 4500);
-}
 
-// Section transition overlay logic
-let transitionOverlayEl = null;
-function ensureTransitionOverlay() {
-    if (!transitionOverlayEl) {
-        transitionOverlayEl = document.createElement('div');
-        transitionOverlayEl.className = 'transition-overlay';
-        document.body.appendChild(transitionOverlayEl);
-    }
-}
-
-function animateSectionTransition(onMidpoint) {
-    ensureTransitionOverlay();
-    transitionOverlayEl.classList.remove('active');
-    // Force reflow to restart animation
-    void transitionOverlayEl.offsetWidth;
-    transitionOverlayEl.classList.add('active');
-    // Execute action near the midpoint of the overlay animation
-    setTimeout(() => {
-        try { onMidpoint && onMidpoint(); } catch (_) {}
-    }, 250);
-    // Clear overlay after animation completes
-    setTimeout(() => {
-        transitionOverlayEl.classList.remove('active');
-    }, 650);
-}
-
-// Event Listeners
-themeToggle.addEventListener('click', toggleTheme);
-hamburger.addEventListener('click', toggleMobileMenu);
-navLinks.forEach(link => link.addEventListener('click', smoothScroll));
-contactForm.addEventListener('submit', handleContactForm);
-botToggle.addEventListener('click', toggleBot);
-botClose.addEventListener('click', closeBot);
-botSend.addEventListener('click', sendBotMessage);
-botInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        sendBotMessage();
-    }
-});
-
-// Window Events
-window.addEventListener('scroll', () => {
-    updateActiveNavLink();
-    animateOnScroll();
-});
-
-window.addEventListener('resize', () => {
-    if (window.innerWidth > 768) {
-        closeMobileMenu();
-    }
-});
-
-// Initialize
-document.addEventListener('DOMContentLoaded', () => {
-    updateActiveNavLink();
-    animateOnScroll();
-    initTypingAnimation();
-    initVhsTimestamp();
-    initVhsJitter();
-    initResearchSection();
-    
-    // Observe sections for entrance animations
-    const sections = document.querySelectorAll('section[id]');
-    sections.forEach(section => sectionObserver.observe(section));
-    
-    // Add initial hero animation
-    const heroContent = document.querySelector('.hero-content');
-    if (heroContent) {
-        heroContent.style.opacity = '0';
-        heroContent.style.transform = 'translateY(20px)';
-        
-        setTimeout(() => {
-            heroContent.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-            heroContent.style.opacity = '1';
-            heroContent.style.transform = 'translateY(0)';
-        }, 200);
-    }
-});
-
-// Intersection Observer for better performance
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('fade-in-up');
+        for (const n of nodes) {
+            ctx.fillStyle = n.accent ? `rgba(${c.accent}, 0.5)` : `rgba(${c.node}, 0.4)`;
+            ctx.beginPath();
+            ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+            ctx.fill();
         }
-    });
-}, observerOptions);
-
-// Observe elements for animation
-document.addEventListener('DOMContentLoaded', () => {
-    const animatedElements = document.querySelectorAll('.project-card, .blog-card, .timeline-item, .skill-category');
-    animatedElements.forEach(el => observer.observe(el));
-});
-
-// Preload critical images
-function preloadImages() {
-    const imageUrls = [
-        'latest-pic.jpg',
-        'project1.png',
-        'project2.png',
-        'project3.png',
-        'blog1.jpg',
-        'blog2.jpg'
-    ];
-    
-    imageUrls.forEach(url => {
-        const img = new Image();
-        img.src = url;
-    });
-}
-
-// Call preload function
-preloadImages();
-
-// Add loading animation
-window.addEventListener('load', () => {
-    document.body.classList.add('loaded');
-});
-
-// Simple smooth scrolling
-function smoothScroll(e) {
-    e.preventDefault();
-    const targetId = this.getAttribute('href');
-    const targetSection = document.querySelector(targetId);
-    
-    if (targetSection) {
-        animateSectionTransition(() => {
-            const offsetTop = targetSection.offsetTop - 70;
-            window.scrollTo({
-                top: offsetTop,
-                behavior: 'smooth'
-            });
-            closeMobileMenu();
-        });
     }
-}
 
-// Simple section entrance animations
-function animateSectionEntrance(section) {
-    section.classList.add('animate-in');
-    
-    const animatedElements = section.querySelectorAll('.fade-in-up, .fade-in-left, .fade-in-right, .scale-in, .stagger-item');
-    
-    animatedElements.forEach((element, index) => {
-        setTimeout(() => {
-            element.classList.add('animate-in');
-        }, index * 50);
-    });
-}
-
-// Research section data and rendering
-function initResearchSection() {
-    const papers = [
-        { title: 'Attention Is All You Need', link: 'https://arxiv.org/abs/1706.03762' },
-        { title: 'VGGT: Visual Geometry Grounded Transformer', link: 'https://arxiv.org/abs/2503.11651' },
-        { title: 'GONet: A Generalizable Deep Learning Model for Glaucoma Detection', link: 'https://arxiv.org/abs/2502.19514' },
-        { title: 'U-Net: Convolutional Networks for Biomedical Image Segmentation', link: 'https://arxiv.org/abs/1505.04597' },
-        { title: 'Very Deep Convolutional Networks for Large-Scale Image Recognition (VGGNet)', link: 'https://arxiv.org/abs/1409.1556' },
-        { title: 'Going Deeper with Convolutions (Inception/GoogLeNet)', link: 'https://arxiv.org/abs/1409.4842' },
-        { title: 'Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks', link: 'https://arxiv.org/abs/1506.01497' },
-        { title: 'Fully Convolutional Networks for Semantic Segmentation (FCN)', link: 'https://arxiv.org/abs/1411.4038' },
-        { title: 'You Only Look Once: Unified, Real-Time Object Detection (YOLO)', link: 'https://arxiv.org/abs/1506.02640' }
-    ];
-    const datasets = [
-        { name: 'xView', link: 'https://xviewdataset.org' },
-        { name: 'RarePlanes', link: 'https://rareplanes.org' },
-        { name: 'LEVIR-CD', link: 'https://justchenhao.github.io/LEVIR/' },
-        { name: 'WHU-CD', link: 'https://study.rsgis.whu.edu.cn/pages/download/building_dataset.html' },
-        { name: 'DOTA', link: 'https://captain-whu.github.io/DOTA/' },
-        { name: 'HYGD', link: '#' },
-        { name: 'ORIGA', link: 'https://refuge.grand-challenge.org/datasets/ (ORIGA info references)' },
-        { name: 'REFUGE', link: 'https://refuge.grand-challenge.org/' },
-        { name: 'DRISHTI-GS', link: 'https://cvit.iiit.ac.in/projects/mip/drishti-gs/' },
-        { name: 'EyePACS (AIROGS-Light v2)', link: 'https://airogs.grand-challenge.org/' }
-    ];
-
-    const paperList = document.getElementById('paperList');
-    const datasetList = document.getElementById('datasetList');
-    const paperCountEl = document.getElementById('paperCount');
-    const datasetCountEl = document.getElementById('datasetCount');
-    if (!paperList || !datasetList) return;
-
-    paperList.innerHTML = papers
-        .map(p => `<li class="fade-in-up"><a href="${p.link}" target="_blank" rel="noopener">${p.title}</a></li>`)
-        .join('');
-    datasetList.innerHTML = datasets
-        .map(d => `<li class="fade-in-up"><a href="${d.link}" target="_blank" rel="noopener">${d.name}</a></li>`)
-        .join('');
-    if (paperCountEl) paperCountEl.textContent = String(papers.length);
-    if (datasetCountEl) datasetCountEl.textContent = String(datasets.length);
-}
-
-// Intersection Observer for section animations
-const sectionObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            animateSectionEntrance(entry.target);
-            sectionObserver.unobserve(entry.target);
+    function step() {
+        for (const n of nodes) {
+            n.x += n.vx;
+            n.y += n.vy;
+            if (n.x < -20) n.x = w + 20; else if (n.x > w + 20) n.x = -20;
+            if (n.y < -20) n.y = h + 20; else if (n.y > h + 20) n.y = -20;
         }
-    });
-}, { 
-    threshold: 0.1,
-    rootMargin: '0px 0px -20px 0px'
-});
+        draw();
+        requestAnimationFrame(step);
+    }
 
-// Simple loading state
-window.addEventListener('load', () => {
-    document.body.classList.add('loaded');
-});
+    window.addEventListener('resize', resize);
+    window.addEventListener('pointermove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+    window.addEventListener('pointerleave', () => { mouse.x = null; mouse.y = null; });
+
+    resize();
+    if (reducedMotion) {
+        draw(); // static constellation, no motion
+    } else {
+        requestAnimationFrame(step);
+    }
+})();
